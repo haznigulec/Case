@@ -15,6 +15,13 @@ class ShoppingAdapter(private val ShoppingItem: ArrayList<ShoppingItems>, privat
         fun bind (things: ShoppingItems){
             binding.textList.text=things.itemName
             binding.textAmount.text = "${things.itemAmount}"
+            binding.plus.setOnClickListener {
+                viewModel.updateItemAmount(things.itemName, things.itemAmount + 1)
+            }
+
+            binding.del.setOnClickListener {
+                viewModel.updateItemAmount(things.itemName, things.itemAmount - 1)
+            }
 
         }
 
