@@ -17,6 +17,7 @@ import com.example.acase.viewmodel.ShoppingViewModel
 
 class ShoppingFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
+    private val SHARED_PREFS_KEY = "MyPrefs"
     private lateinit var binding : FragmentShoppingBinding
     private lateinit var viewModel : ShoppingViewModel
     private lateinit var itemAdapter : ShoppingAdapter
@@ -30,7 +31,7 @@ class ShoppingFragment : Fragment() {
         binding = FragmentShoppingBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(ShoppingViewModel::class.java)
-        viewModel.datas()
+        viewModel.loadData()
 
         itemAdapter = ShoppingAdapter(ArrayList(), viewModel)
 
@@ -40,8 +41,7 @@ class ShoppingFragment : Fragment() {
         observeData()
 
 
-        sharedPreferences = requireContext().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-
+        sharedPreferences = requireContext().getSharedPreferences(SHARED_PREFS_KEY, Context.MODE_PRIVATE)
 
 
 
@@ -62,10 +62,23 @@ class ShoppingFragment : Fragment() {
             if (itemName.isNotBlank()) {
                 viewModel.addItem(ShoppingItems(itemName, 1))
                 binding.edit.text.clear()
+                viewModel.saveData()
             }
         }
         return binding.root
     }
+
+    override fun onResume() {
+        super.onResume()
+        itemAdapter.clearItems() // clear the adapter
+        viewModel.loadData() // reload the data from the ViewModel
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.saveData()
+    }
+
 
 
 

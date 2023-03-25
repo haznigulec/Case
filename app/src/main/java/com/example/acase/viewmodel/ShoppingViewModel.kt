@@ -1,28 +1,53 @@
 package com.example.acase.viewmodel
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.acase.model.ShoppingItems
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class ShoppingViewModel : ViewModel() {
+class ShoppingViewModel(application: Application) : AndroidViewModel(application) {
 
     private val itemList = mutableListOf<ShoppingItems>()
-
+    private val SHARED_PREFS_KEY = "MyPrefs"
     //val itemList = items.value?.toMutableList() ?: mutableListOf()
     val items = MutableLiveData<List<ShoppingItems>>()
     val firstError = MutableLiveData<Boolean>()
 
+    private val sharedPreferences = application.getSharedPreferences(SHARED_PREFS_KEY, Context.MODE_PRIVATE)
 
+    fun loadData() {
+        val gson = Gson()
+        val json = sharedPreferences.getString("itemList", "")
+        if (json != "") {
+            val type = object : TypeToken<List<ShoppingItems>>() {}.type
+            itemList.clear()
+            itemList.addAll(gson.fromJson(json, type))
+            items.value = itemList
+        }
+    }
+
+    fun saveData() {
+        val editor = sharedPreferences.edit()
+        val gson = Gson()
+        val json = gson.toJson(itemList)
+        editor.putString("itemList", json)
+        editor.apply()
+    }
 
     fun datas() {
 
-        val deneme = ShoppingItems("pelin", 5)
+        /*val deneme = ShoppingItems("pelin", 5)
         val deneme2 = ShoppingItems("irem", 2)
         val deneme3 = ShoppingItems("hazni", 3)
 
-        val itemlist = arrayListOf<ShoppingItems>(deneme, deneme2, deneme3)
+        val itemlist = arrayListOf<ShoppingItems>(deneme, deneme2, deneme3) */
 
-        items.value = itemlist
+
+        //itemList.clear()
+        //items.value = emptyList()
         //  firstError.value=false
     }
 
@@ -59,6 +84,9 @@ class ShoppingViewModel : ViewModel() {
 
     fun clearItems() {
         itemList.clear()
-        items.value = itemList
+        items.value = emptyList()
+
     }
+
+
 }

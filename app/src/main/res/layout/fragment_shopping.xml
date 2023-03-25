@@ -47,7 +47,7 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/complete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
@@ -90,7 +90,7 @@
         android:layout_width="238dp"
         android:layout_height="38dp"
         android:text="You need to add something."
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/complete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.722"
         app:layout_constraintStart_toStartOf="parent"
