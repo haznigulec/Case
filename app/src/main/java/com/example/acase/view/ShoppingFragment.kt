@@ -31,7 +31,7 @@ class ShoppingFragment : Fragment() {
         binding = FragmentShoppingBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(ShoppingViewModel::class.java)
-        viewModel.loadData()
+        //viewModel.loadData()
 
         itemAdapter = ShoppingAdapter(ArrayList(), viewModel)
 
@@ -62,7 +62,7 @@ class ShoppingFragment : Fragment() {
 
 
 
-            //findNavController().navigate(R.id.action_shoppingFragment_to_historyFragment)
+            findNavController().navigate(R.id.action_shoppingFragment_to_historyFragment)
         }
 
         binding.add.setOnClickListener {

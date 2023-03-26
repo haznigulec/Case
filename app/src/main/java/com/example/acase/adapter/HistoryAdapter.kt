@@ -28,5 +28,4 @@ class HistoryAdapter(private var numbers: List<HistoryList>) :
     override fun getItemCount(): Int {
         return numbers.size
     }
-
 }

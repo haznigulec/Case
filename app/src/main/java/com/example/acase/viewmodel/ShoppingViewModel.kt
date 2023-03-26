@@ -3,6 +3,7 @@ package com.example.acase.viewmodel
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.acase.model.HistoryList
@@ -38,6 +39,7 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
 
     }
 
+
      fun saveData() {
          if(itemList!=null) {
              val editor = sharedPreferences.edit()
@@ -47,7 +49,6 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
              editor.apply()
          }
      }
-
     fun addItem(item: ShoppingItems) {
         if (itemList.isEmpty()){
             val x=mutableListOf<ShoppingItems>()

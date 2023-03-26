@@ -14,7 +14,6 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
     val itemList = mutableListOf<HistoryList>()
 
     val items = MutableLiveData<List<HistoryList>>()
-    val firstError = MutableLiveData<Boolean>()
     private val sharedPreferences = application.getSharedPreferences("mySharedPreferences", Context.MODE_PRIVATE)
 
 

@@ -9,12 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.acase.adapter.HistoryAdapter
 import com.example.acase.databinding.FragmentHistoryBinding
+import com.example.acase.viewmodel.HistoryViewModel
 import com.example.acase.viewmodel.ShoppingViewModel
 
 
 class HistoryFragment : Fragment() {
     private lateinit var binding: FragmentHistoryBinding
-    private lateinit var viewModel: ShoppingViewModel
+    private lateinit var viewModel: HistoryViewModel
     private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
@@ -22,25 +23,19 @@ class HistoryFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
-        viewModel.loadData()
+
+        viewModel = ViewModelProvider(requireActivity()).get(HistoryViewModel::class.java)
+        adapter = HistoryAdapter(emptyList())
+        binding.rcview.layoutManager = LinearLayoutManager(requireContext())
+        binding.rcview.adapter = adapter
 
         return binding.root
 
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-
-        viewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
-        adapter = HistoryAdapter(emptyList())
-        binding.rcview.layoutManager = LinearLayoutManager(requireContext())
-        binding.rcview.adapter = adapter
-
-
-
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadData() // reload the data from the ViewModel
     }
 }
 
