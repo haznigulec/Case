@@ -12,7 +12,7 @@ import com.google.gson.reflect.TypeToken
 
 class ShoppingViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val itemList = mutableListOf<HistoryList>()
+     val itemList = mutableListOf<HistoryList>()
 
     val items = MutableLiveData<List<ShoppingItems>>()
     val firstError = MutableLiveData<Boolean>()
@@ -22,47 +22,51 @@ class ShoppingViewModel(application: Application) : AndroidViewModel(application
 
      fun loadData() {
 
-         val gson = Gson()
+        val gson = Gson()
 
-         val json = sharedPreferences.getString("itemList", "")
+        val json = sharedPreferences.getString("itemList", "")
 
-         if (json != "") {
+        if (json != "") {
 
-             val type = object : TypeToken<List<HistoryList>>() {}.type
+            val type = object : TypeToken<List<HistoryList>>() {}.type
 
-             itemList.clear()
+            itemList.clear()
 
-           itemList.addAll(gson.fromJson(json, type))
-             println(itemList)
-          items.value = itemList.last().itemList
-}
+            itemList.addAll(gson.fromJson(json, type))
+            items.value = itemList.last().itemList
+        }
 
-}
+    }
 
      fun saveData() {
-      //   if(itemList!=null){
-         val editor = sharedPreferences.edit()
-         val gson = Gson()
-         val json = gson.toJson(itemList)
-         editor.putString("itemList", json)
-         editor.apply()
-
+         if(itemList!=null) {
+             val editor = sharedPreferences.edit()
+             val gson = Gson()
+             val json = gson.toJson(itemList)
+             editor.putString("itemList", json)
+             editor.apply()
+         }
      }
 
     fun addItem(item: ShoppingItems) {
-        if(itemList.last().itemList != null){
+        if (itemList.isEmpty()){
+            val x=mutableListOf<ShoppingItems>()
+            x.add(item);
+            itemList.add(HistoryList("exp",x))
+        }else{
+            if(itemList.last().itemList != null){
 
-            val existingItem = itemList.last().itemList.find { it.itemName == item.itemName }
-            if (existingItem == null) {
+                val existingItem = itemList.last().itemList.find { it.itemName == item.itemName }
+                if (existingItem == null) {
+                    itemList.last().itemList.add(item)
+                } else {
+                    existingItem.itemAmount += item.itemAmount
+                }
+            }else {
                 itemList.last().itemList.add(item)
-            } else {
-                existingItem.itemAmount += item.itemAmount
             }
-        }else {
-            val list = mutableListOf<ShoppingItems>()
-            list.add(item)
-            itemList.add(HistoryList("isim",list))
         }
+
 
         items.value = itemList.last().itemList
     }

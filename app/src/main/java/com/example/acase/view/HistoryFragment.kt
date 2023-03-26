@@ -21,8 +21,9 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
+        viewModel.loadData()
+
         return binding.root
 
     }
