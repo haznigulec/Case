@@ -5,27 +5,41 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.acase.R
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.acase.adapter.HistoryAdapter
 import com.example.acase.databinding.FragmentHistoryBinding
+import com.example.acase.viewmodel.ShoppingViewModel
 
 
 class HistoryFragment : Fragment() {
-    private lateinit var binding : FragmentHistoryBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var binding: FragmentHistoryBinding
+    private lateinit var viewModel: ShoppingViewModel
+    private lateinit var adapter: HistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
 
-        binding = FragmentHistoryBinding.inflate(inflater,container,false)
+        binding = FragmentHistoryBinding.inflate(inflater, container, false)
         return binding.root
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+
+
+        viewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
+        adapter = HistoryAdapter(emptyList())
+        binding.rcview.layoutManager = LinearLayoutManager(requireContext())
+        binding.rcview.adapter = adapter
+
+
+
+
+    }
 }
+

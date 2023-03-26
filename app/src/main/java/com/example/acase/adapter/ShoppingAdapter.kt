@@ -22,6 +22,9 @@ class ShoppingAdapter(private val ShoppingItem: ArrayList<ShoppingItems>, privat
             binding.del.setOnClickListener {
                 viewModel.updateItemAmount(things.itemName, things.itemAmount - 1)
             }
+            binding.cya.setOnClickListener {
+                viewModel.removeItem(things.itemName)
+            }
 
         }
 

@@ -1,7 +1,5 @@
 package com.example.acase.view
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -14,10 +12,12 @@ import com.example.acase.adapter.ShoppingAdapter
 import com.example.acase.databinding.FragmentShoppingBinding
 import com.example.acase.model.ShoppingItems
 import com.example.acase.viewmodel.ShoppingViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ShoppingFragment : Fragment() {
-    private lateinit var sharedPreferences: SharedPreferences
-    private val SHARED_PREFS_KEY = "MyPrefs"
+
     private lateinit var binding : FragmentShoppingBinding
     private lateinit var viewModel : ShoppingViewModel
     private lateinit var itemAdapter : ShoppingAdapter
@@ -31,7 +31,7 @@ class ShoppingFragment : Fragment() {
         binding = FragmentShoppingBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProvider(this).get(ShoppingViewModel::class.java)
-        viewModel.loadData()
+       // viewModel.loadData()
 
         itemAdapter = ShoppingAdapter(ArrayList(), viewModel)
 
@@ -39,9 +39,6 @@ class ShoppingFragment : Fragment() {
         binding.recyclerView.adapter = itemAdapter
 
         observeData()
-
-
-        sharedPreferences = requireContext().getSharedPreferences(SHARED_PREFS_KEY, Context.MODE_PRIVATE)
 
 
 
@@ -55,14 +52,27 @@ class ShoppingFragment : Fragment() {
         binding.history.setOnClickListener{
             findNavController().navigate(R.id.action_shoppingFragment_to_historyFragment)
         }
+        binding.complete.setOnClickListener {
+
+
+                /*viewModel.saveData()
+                viewModel.clearItems()
+                itemAdapter.clearItems()
+
+
+                 */
+
+            findNavController().navigate(R.id.action_shoppingFragment_to_historyFragment)
+        }
 
         binding.add.setOnClickListener {
             val itemName = binding.edit.text.toString()
 
             if (itemName.isNotBlank()) {
-                viewModel.addItem(ShoppingItems(itemName, 1))
+                viewModel.addItem(ShoppingItems(itemName, 1,))
                 binding.edit.text.clear()
-                viewModel.saveData()
+                // CoroutineScope(Dispatchers.IO).launch {
+                   // viewModel.saveData() }
             }
         }
         return binding.root
@@ -76,7 +86,8 @@ class ShoppingFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        viewModel.saveData()
+        CoroutineScope(Dispatchers.IO).launch {
+          viewModel.saveData() }
     }
 
 
